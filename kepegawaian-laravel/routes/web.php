@@ -3,18 +3,22 @@
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Department;
+use App\Models\Employee;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => redirect()->route('employees.index'));
+Route::get('/', fn () => redirect()->route('dashboard'));
 
-Route::get('/dashboard', function () {
-    return view('dashboard', [
-        'totalEmployees' => \App\Models\Employee::count(),
-        'totalDepartments' => \App\Models\Department::count(),
-        'totalSalary' => \App\Models\Employee::sum('salary'),
-        'departments' => \App\Models\Department::withCount('employees')->get(),
-    ]);
-})->name('dashboard');
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard', [
+            'totalEmployees' => Employee::count(),
+            'totalDepartments' => Department::count(),
+            'totalSalary' => Employee::sum('salary'),
+            'departments' => Department::withCount('employees')->get(),
+        ]);
+    })->name('dashboard');
+
     Route::resource('departments', DepartmentController::class)->except('show');
     Route::resource('employees', EmployeeController::class)->except('show');
 
