@@ -2,24 +2,63 @@
 
 namespace Database\Seeders;
 
+use App\Models\Department;
+use App\Models\Employee;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // 1 akun untuk uji login
+        User::create([
+            'name' => 'Admin HRD',
+            'email' => 'admin@example.com',
+            'password' => Hash::make('password123'),
+        ]);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // 3 departemen
+        $ti = Department::create(['name' => 'Teknologi Informasi']);
+        $sdm = Department::create(['name' => 'Sumber Daya Manusia']);
+        $keu = Department::create(['name' => 'Keuangan']);
+
+        // 5 pegawai
+        Employee::create([
+            'department_id' => $ti->id,
+            'name' => 'Andi Saputra',
+            'position' => 'Backend Developer',
+            'salary' => 8000000,
+            'joined_at' => '2022-03-01',
+        ]);
+        Employee::create([
+            'department_id' => $ti->id,
+            'name' => 'Budi Santoso',
+            'position' => 'Frontend Developer',
+            'salary' => 7500000,
+            'joined_at' => '2023-01-15',
+        ]);
+        Employee::create([
+            'department_id' => $sdm->id,
+            'name' => 'Citra Lestari',
+            'position' => 'HR Specialist',
+            'salary' => 6500000,
+            'joined_at' => '2021-07-10',
+        ]);
+        Employee::create([
+            'department_id' => $keu->id,
+            'name' => 'Dian Permata',
+            'position' => 'Akuntan',
+            'salary' => 7000000,
+            'joined_at' => '2020-11-20',
+        ]);
+        Employee::create([
+            'department_id' => $sdm->id,
+            'name' => 'Eko Prasetyo',
+            'position' => 'Recruiter',
+            'salary' => 6000000,
+            'joined_at' => '2024-02-05',
         ]);
     }
 }
